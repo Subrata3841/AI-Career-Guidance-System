@@ -40,7 +40,7 @@ Traditional career counseling methods often lack personalization and fail to ful
 
 1. **Clone the repository**
    ```
-   git clone https://github.com/yourusername/career-compass.git
+   git clone https://github.com/Subrata3841/AI-Career-Guidance-System.git
    cd career-compass
    ```
 
