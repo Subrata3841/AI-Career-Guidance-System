@@ -91,7 +91,6 @@ career-compass/
 ├── simple_api_server.py               # Flask API server
 ├── career-guidance-backend.py         # Advanced backend implementation
 ├── simple_frontend.html               # Basic UI implementation
-├── career-guidance-frontend.tsx       # Advanced React frontend
 ├── run_career_compass.bat             # Windows batch startup script
 └── Run-CareerCompass.ps1              # PowerShell startup script
 ```
