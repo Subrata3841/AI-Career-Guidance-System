@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Guidance System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(to right, #4a6cf7, #7e3af2);
+        }
+        .card-gradient {
+            background: linear-gradient(to bottom right, #eef2ff, #e0e7ff);
+        }
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .option-btn {
+            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border-width: 2px !important;
+            font-weight: 600 !important;
+        }
+        .option-btn.selected {
+            background-color: #ea580c !important; /* orange-600 */
+            color: white !important;
+            border: 3px solid #9a3412 !important; /* orange-800 */
+            font-weight: bold !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            transform: translateY(-1px);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+            letter-spacing: 0.3px;
+        }
+        .option-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        #next-btn, #restart-btn, #start-assessment-btn {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            font-weight: 800;
+        }
+        
+        #next-btn:hover, #restart-btn:hover, #start-assessment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2), 0 3px 6px rgba(0,0,0,0.15);
+            filter: brightness(110%);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        #next-btn:active, #restart-btn:active, #start-assessment-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div id="app">
+        <!-- Header -->
+        <header class="gradient-bg text-white p-6 shadow-lg">
+            <h1 class="text-4xl font-bold">AI Career Guidance</h1>
+            <p class="text-xl mt-2">Navigate Your Professional Future</p>
+        </header>
+
+        <div class="container mx-auto p-4">
+            <!-- Home Page -->
+            <div id="home-page" class="mt-6 bg-gradient-to-br from-green-100 to-blue-100 shadow-xl rounded-lg">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-3xl font-semibold text-blue-800">Discover Your Ideal Career Path</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-lg text-gray-700 mb-4">
+                        Embark on a journey of self-discovery and professional growth with our AI-powered career guidance system.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-600 mb-6">
+                        <li>In-depth personality assessment</li>
+                        <li>Skills and interests analysis</li>
+                        <li>AI-driven career recommendations</li>
+                        <li>Personalized development roadmap</li>
+                    </ul>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-b-lg flex justify-center">
+                    <button id="start-assessment-btn" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-12 py-6 rounded-full shadow-lg transition duration-300 ease-in-out text-2xl font-extrabold flex items-center">
+                        <span class="relative z-10">Start Your Career Journey</span> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 ml-3 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Assessment Page -->
+            <div id="assessment-page" class="hidden mt-6 bg-gradient-to-br from-yellow-100 to-orange-100 shadow-xl rounded-lg">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-2xl font-semibold text-orange-800">Career Assessment</h2>
+                    <div class="mt-2 bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-orange-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id="question-container">
+                        <!-- Questions will be inserted here -->
+                    </div>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-b-lg flex justify-center">
+                    <button id="next-btn" class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-12 py-6 rounded-full shadow-lg transition duration-300 ease-in-out text-2xl font-extrabold flex items-center">
+                        <span class="relative z-10">Next Question</span> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 ml-3 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Page -->
+            <div id="loading-page" class="hidden mt-6 bg-white shadow-xl rounded-lg p-12">
+                <div class="text-center">
+                    <svg class="animate-spin h-16 w-16 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="mt-6 text-xl text-gray-700">Analyzing your responses...</p>
+                    <p class="mt-2 text-gray-500">Our AI is generating personalized career recommendations for you.</p>
+                </div>
+            </div>
+
+            <!-- Results Page -->
+            <div id="results-page" class="hidden mt-6 bg-gradient-to-br from-purple-100 to-pink-100 shadow-xl rounded-lg">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-3xl font-semibold text-purple-800">Your Career Recommendations</h2>
+                </div>
+                <div id="recommendations-container" class="p-6">
+                    <!-- Recommendations will be inserted here -->
+                </div>
+                <div class="p-6 bg-gray-50 rounded-b-lg flex justify-center">
+                    <button id="restart-btn" class="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-10 py-5 rounded-full shadow-lg transition duration-300 ease-in-out text-xl font-extrabold flex items-center">
+                        <span class="relative z-10">Start New Assessment</span> <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 ml-3 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white p-4 mt-8">
+            <p class="text-center">&copy; 2025 AI Career Guidance | Empowering Career Decisions</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Page navigation
+            const homePage = document.getElementById('home-page');
+            const assessmentPage = document.getElementById('assessment-page');
+            const loadingPage = document.getElementById('loading-page');
+            const resultsPage = document.getElementById('results-page');
+            
+            // Buttons
+            const startAssessmentBtn = document.getElementById('start-assessment-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            
+            // Assessment variables
+            const questions = [
+                { 
+                    id: 1, 
+                    text: "What are your top skills?",
+                    type: "multiselect",
+                    options: ["Programming", "Data Analysis", "Design", "Communication", "Project Management", "Writing", "Research", "Leadership"]
+                },
+                { 
+                    id: 2, 
+                    text: "What are your main interests?",
+                    type: "multiselect",
+                    options: ["Technology", "Science", "Business", "Arts", "Healthcare", "Education", "Finance", "Engineering"]
+                },
+                { 
+                    id: 3, 
+                    text: "How many years of work experience do you have?",
+                    type: "select",
+                    options: ["0 years", "1-2 years", "3-5 years", "6-10 years", "10+ years"]
+                },
+                { 
+                    id: 4, 
+                    text: "What is your highest level of education?",
+                    type: "select",
+                    options: ["High School", "Associate's Degree", "Bachelor's Degree", "Master's Degree", "PhD or Doctorate"]
+                }
+            ];
+            
+            let currentQuestion = 0;
+            const answers = {
+                skills: [],
+                interests: [],
+                years_of_experience: 0,
+                education_level_encoded: 1
+            };
+            
+            // Functions to show/hide pages
+            function showPage(page) {
+                homePage.classList.add('hidden');
+                assessmentPage.classList.add('hidden');
+                loadingPage.classList.add('hidden');
+                resultsPage.classList.add('hidden');
+                
+                page.classList.remove('hidden');
+            }
+            
+            // Start assessment button
+            startAssessmentBtn.addEventListener('click', function() {
+                showPage(assessmentPage);
+                displayQuestion();
+            });
+            
+            // Restart button
+            restartBtn.addEventListener('click', function() {
+                currentQuestion = 0;
+                answers.skills = [];
+                answers.interests = [];
+                answers.years_of_experience = 0;
+                answers.education_level_encoded = 1;
+                showPage(homePage);
+            });
+            
+            // Display current question
+            function displayQuestion() {
+                const question = questions[currentQuestion];
+                const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
+                document.getElementById('progress-bar').style.width = progressPercentage + '%';
+                
+                const questionContainer = document.getElementById('question-container');
+                
+                let html = `<p class="text-xl mb-4 text-gray-700">${question.text}</p>`;
+                
+                if (question.type === 'multiselect') {
+                    html += `<div class="grid grid-cols-2 gap-3 mt-4">`;
+                    question.options.forEach(option => {
+                        const isSelected = question.id === 1 
+                            ? answers.skills.includes(option) 
+                            : answers.interests.includes(option);
+                        
+                        html += `
+                            <button type="button" class="option-btn w-full ${isSelected ? 'selected' : 'bg-orange-200'} text-orange-800 hover:bg-orange-300 p-4 rounded-lg font-medium border-2 border-orange-400" 
+                                   data-option="${option}" data-question="${question.id}">
+                                <span class="block">${option}</span>
+                            </button>
+                        `;
+                    });
+                    html += `</div>`;
+                } else if (question.type === 'select') {
+                    html += `<select id="select-answer" class="w-full p-3 border-2 border-orange-300 rounded mt-4 bg-white text-gray-700 font-medium text-lg appearance-none">`;
+                    html += `<option value="" disabled selected>Select an option</option>`;
+                    question.options.forEach((option, index) => {
+                        html += `<option value="${index}">${option}</option>`;
+                    });
+                    html += `</select>`;
+                    html += `<div class="relative">
+                      <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                      </div>
+                    </div>`;
+                }
+                
+                questionContainer.innerHTML = html;
+                
+                // Add event listeners for options
+                if (question.type === 'multiselect') {
+                    setTimeout(() => {
+                        console.log("Setting up option buttons");
+                        const optionButtons = document.querySelectorAll('.option-btn');
+                        console.log(`Found ${optionButtons.length} option buttons`);
+                        
+                        optionButtons.forEach(btn => {
+                            console.log("Adding event listener to option:", btn.getAttribute('data-option'));
+                            btn.addEventListener('click', function(e) {
+                                console.log("Button clicked:", this.textContent.trim());
+                                // Add a visual feedback on click
+                                const ripple = document.createElement('span');
+                                this.style.position = 'relative';
+                                this.style.overflow = 'hidden';
+                                
+                                // Show the click is registered
+                                this.style.transition = 'transform 0.1s';
+                                this.style.transform = 'scale(0.98)';
+                                setTimeout(() => {
+                                    this.style.transform = '';
+                                }, 100);
+                                const option = this.getAttribute('data-option');
+                                const questionId = parseInt(this.getAttribute('data-question'));
+                                console.log("Option clicked:", option, "Question ID:", questionId);
+                                
+                                if (questionId === 1) {
+                                    // Skills question
+                                    if (answers.skills.includes(option)) {
+                                        answers.skills = answers.skills.filter(item => item !== option);
+                                        this.classList.remove('selected');
+                                        this.classList.add('bg-orange-200');
+                                        console.log('Deselected skill:', option);
+                                    } else {
+                                        answers.skills.push(option);
+                                        this.classList.remove('bg-orange-200');
+                                        this.classList.add('selected');
+                                        console.log('Selected skill:', option);
+                                    }
+                                    console.log("Updated skills:", answers.skills);
+                                } else {
+                                    // Interests question
+                                    if (answers.interests.includes(option)) {
+                                        answers.interests = answers.interests.filter(item => item !== option);
+                                        this.classList.remove('selected');
+                                        this.classList.add('bg-orange-200');
+                                        console.log('Deselected interest:', option);
+                                    } else {
+                                        answers.interests.push(option);
+                                        this.classList.remove('bg-orange-200');
+                                        this.classList.add('selected');
+                                        console.log('Selected interest:', option);
+                                    }
+                                    console.log("Updated interests:", answers.interests);
+                                }
+                            });
+                        });
+                    }, 100); // Small delay to ensure DOM is ready
+                }
+                
+                // Update Next button text with HTML content to ensure the icon remains
+                const buttonText = currentQuestion < questions.length - 1 ? 'Next Question' : 'Submit Assessment';
+                
+                // If this is the submit button, make it more prominent with different styling
+                if (currentQuestion === questions.length - 1) {
+                    // Green submit button with larger text and stronger styling
+                    nextBtn.classList.remove('from-orange-500', 'to-orange-600', 'hover:from-orange-600', 'hover:to-orange-700');
+                    nextBtn.classList.add('from-green-500', 'to-green-600', 'hover:from-green-600', 'hover:to-green-700');
+
+                    // Enhanced styling for the submit button (explicit colors)
+                    nextBtn.style.textShadow = '0 2px 4px rgba(0,0,0,0.6)';
+                    nextBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.35), 0 0 18px rgba(16,185,129,0.45)';
+                    nextBtn.style.borderWidth = '3px';
+                    nextBtn.style.borderColor = 'rgba(16,185,129,0.9)';
+                    nextBtn.style.color = 'white';
+                    nextBtn.style.backgroundImage = 'linear-gradient(90deg,#10b981,#059669)';
+                    nextBtn.style.padding = '18px 48px';
+
+                    nextBtn.innerHTML = `
+                        <span class="relative z-10 text-2xl font-extrabold">${buttonText}</span> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 ml-3 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>`;
+                } else {
+                    // Orange next button with normal styling (explicit colors)
+                    nextBtn.classList.remove('from-green-500', 'to-green-600', 'hover:from-green-600', 'hover:to-green-700');
+                    nextBtn.classList.add('from-orange-500', 'to-orange-600', 'hover:from-orange-600', 'hover:to-orange-700');
+
+                    nextBtn.style.textShadow = '0 1px 3px rgba(0,0,0,0.45)';
+                    nextBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.22), 0 0 8px rgba(236,72,153,0.03)';
+                    nextBtn.style.borderWidth = '3px';
+                    nextBtn.style.borderColor = 'rgba(255,255,255,0.9)';
+                    nextBtn.style.color = 'white';
+                    nextBtn.style.backgroundImage = 'linear-gradient(90deg,#f97316,#ea580c)';
+                    nextBtn.style.padding = '18px 48px';
+
+                    nextBtn.innerHTML = `
+                        <span class="relative z-10">${buttonText}</span> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 ml-3 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>`;
+                }
+            }
+            
+            // Next button
+            nextBtn.addEventListener('click', function() {
+                // Validate and save answer for current question
+                const question = questions[currentQuestion];
+                
+                if (question.type === 'multiselect') {
+                    if (question.id === 1 && answers.skills.length === 0) {
+                        alert('Please select at least one skill');
+                        return;
+                    }
+                    if (question.id === 2 && answers.interests.length === 0) {
+                        alert('Please select at least one interest');
+                        return;
+                    }
+                } else if (question.type === 'select') {
+                    const selectElement = document.getElementById('select-answer');
+                    if (!selectElement.value) {
+                        alert('Please select an option');
+                        return;
+                    }
+                    
+                    if (question.id === 3) {
+                        // Years of experience
+                        const yearsValue = parseInt(selectElement.value);
+                        // Map to actual years (approximate values)
+                        const yearsMap = [0, 1, 4, 8, 12];
+                        answers.years_of_experience = yearsMap[yearsValue];
+                    } else if (question.id === 4) {
+                        // Education level
+                        answers.education_level_encoded = parseInt(selectElement.value) + 1; // Add 1 to match model's encoding
+                    }
+                }
+                
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    displayQuestion();
+                } else {
+                    // Add a prominent visual cue that the button was clicked
+                    nextBtn.innerHTML = `
+                        <span class="relative z-10 text-2xl font-extrabold">Processing...</span>
+                        <svg class="animate-spin ml-3 h-8 w-8 relative z-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4"></circle>
+                            <path class="opacity-90" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>`;
+                    
+                    // Add a pulsing effect to the button
+                    nextBtn.style.animation = 'pulse 1.5s infinite';
+                    nextBtn.style.opacity = '1';
+                    submitAssessment();
+                }
+            });
+            
+            // Submit assessment and get recommendations
+            function submitAssessment() {
+                showPage(loadingPage);
+                
+                // Prepare data for API
+                const apiData = {
+                    skills: answers.skills.join(' ').toLowerCase(),
+                    interests: answers.interests.join(' ').toLowerCase(),
+                    years_of_experience: answers.years_of_experience,
+                    education_level_encoded: answers.education_level_encoded
+                };
+                
+                console.log("Submitting data to API:", apiData);
+                
+                // Call API
+                setTimeout(() => {
+                    fetch('http://localhost:5000/recommend', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(apiData)
+                    })
+                    .then(response => {
+                        console.log("API response received:", response);
+                        if (!response.ok) {
+                            throw new Error(`API responded with status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("API data:", data);
+                        if (data.recommendations && data.recommendations.length > 0) {
+                            displayResults(data.recommendations);
+                        } else {
+                            throw new Error("No recommendations received from API");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error processing your request. Please try again later.');
+                        showPage(homePage);
+                    });
+                }, 1500); // Simulate processing time
+            }
+            
+            // Display recommendation results
+            function displayResults(recommendations) {
+                const container = document.getElementById('recommendations-container');
+                let html = '';
+                
+                // Add chart placeholder (in a real app, we would use a charting library here)
+                html += `
+                    <div class="bg-white p-4 rounded-lg shadow mb-6">
+                        <div class="h-64 bg-gray-100 rounded flex items-center justify-center">
+                            <p class="text-gray-500">Career Confidence Chart</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Display recommendations
+                recommendations.forEach(recommendation => {
+                    html += `
+                        <div class="bg-white rounded-lg shadow-md mb-4">
+                            <div class="p-4 border-b border-gray-200">
+                                <h3 class="text-xl font-semibold text-purple-700">${recommendation.career_path}</h3>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-lg">Confidence Score:</span>
+                                    <div class="ml-2 flex-grow bg-gray-200 rounded-full h-4 relative">
+                                        <div class="bg-green-500 h-4 rounded-full" style="width: ${recommendation.confidence_score}%"></div>
+                                    </div>
+                                    <span class="ml-2 font-bold">${recommendation.confidence_score}%</span>
+                                </div>
+                                <h4 class="mt-3 font-semibold">Required Skills:</h4>
+                                <ul class="list-disc list-inside">
+                                    ${recommendation.skills_required.map(skill => `<li>${skill}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                showPage(resultsPage);
+            }
+            
+            // Add global error handler to catch any JS errors
+            window.addEventListener('error', function(e) {
+                console.error('Global error caught:', e.message, 'at', e.filename, ':', e.lineno);
+            });
+            
+            console.log('Career guidance application initialized successfully');
+        });
+    </script>
+</body>
+</html>
