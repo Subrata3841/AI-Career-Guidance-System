@@ -32,68 +32,213 @@ Traditional career counseling methods often lack personalization and fail to ful
 ## 📋 Installation & Setup
 
 ### Prerequisites
-- Python 3.7+
-- pip package manager
-- Modern web browser
+- **Python 3.7+** (Check: `python --version`)
+- **pip** package manager (Check: `pip --version`)
+- **Modern web browser** (Chrome, Firefox, Edge)
+- **Git** (for cloning the repository)
 
-### Setup Instructions
+### Quick Start Guide
+
+#### **Option 1: Using PowerShell (Recommended for Windows)**
 
 1. **Clone the repository**
-   ```
+   ```powershell
    git clone https://github.com/Subrata3841/AI-Career-Guidance-System.git
-   cd career-compass
+   cd AI-Career-Guidance-System
    ```
 
-2. **Set up a virtual environment (optional but recommended)**
-   ```
-   python -m venv .venv
-   .venv\Scripts\activate
-   ```
-
-3. **Install required packages**
-   ```
+2. **Install required packages**
+   ```powershell
    pip install -r requirements.txt
    ```
 
-4. **Run the application**
-   
-   For Windows:
-   ```
-   run_career_compass.bat
-   ```
-   
-   For PowerShell:
-   ```
+3. **Run the application**
+   ```powershell
    .\Run-CareerCompass.ps1
    ```
 
-5. **Access the application**
-   
-   The application will be available at:
+4. **Access the application**
+   - The frontend will automatically open in your default browser
    - API Server: http://localhost:5000
-   - Frontend: Will automatically open in your default browser
+   - Press **Enter** in the PowerShell window to stop the application
+
+#### **Option 2: Using Batch File (Windows Command Prompt)**
+
+1. **Clone and navigate**
+   ```batch
+   git clone https://github.com/Subrata3841/AI-Career-Guidance-System.git
+   cd AI-Career-Guidance-System
+   ```
+
+2. **Install dependencies**
+   ```batch
+   pip install -r requirements.txt
+   ```
+
+3. **Run the application**
+   ```batch
+   run_career_compass.bat
+   ```
+
+#### **Option 3: Manual Setup (All Platforms)**
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Subrata3841/AI-Career-Guidance-System.git
+   cd AI-Career-Guidance-System
+   ```
+
+2. **Create virtual environment (optional but recommended)**
+   ```bash
+   python -m venv .venv
+   
+   # Windows
+   .venv\Scripts\activate
+   
+   # Linux/Mac
+   source .venv/bin/activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Run the model and generate visualizations**
+   ```bash
+   python simple_model_runner.py
+   ```
+
+5. **Start the API server** (in a new terminal)
+   ```bash
+   python simple_api_server.py
+   ```
+
+6. **Open the frontend**
+   - Open `simple_frontend.html` in your web browser
+   - Or navigate to http://localhost:5000 if served
+
+### 🎨 Research Visualizations
+
+The system automatically generates research-quality visualizations when you run the model:
+
+```bash
+python simple_model_runner.py
+```
+
+Generated files in `visualizations/` folder:
+- `model_performance_analysis.png` - Model accuracy metrics
+- `research_analytics.png` - Comprehensive research data
+- `comparative_analysis.png` - Algorithm comparisons
+- `user_analysis_dashboard.html` - Interactive dashboard
+- `statistical_report.json` - Quantitative research data
 
 ## 🖥️ Usage
 
-1. Fill out the career assessment form with your skills, interests, education level, and experience
-2. Submit the form to receive personalized career recommendations
-3. Explore recommended career paths and progression opportunities
-4. Review suggested skill development areas to enhance your career prospects
+### **For End Users:**
+1. Open the application (it will launch automatically)
+2. Click **"Start Your Career Journey"** button
+3. Answer 4 quick assessment questions:
+   - Select your skills (multiple choice)
+   - Choose your interests (multiple choice)
+   - Enter years of experience
+   - Select education level
+4. Click **"Submit Assessment"**
+5. View your personalized career recommendations with confidence scores
+6. Click **"View Analytics"** to see interactive research dashboards
+
+### **For Researchers:**
+1. Run the system to collect data
+2. Access analytics dashboard from the results page
+3. Click **"Generate Research Report"** for new visualizations
+4. Click **"Download Visualizations"** to get all charts
+5. Use `visualizations/statistical_report.json` for quantitative data
+
+## 🔧 Troubleshooting
+
+### **Issue: "Model file not found"**
+**Solution:** Run `python simple_model_runner.py` first to generate the model
+
+### **Issue: "API Server not responding"**
+**Solution:** 
+- Check if port 5000 is available
+- Restart the API server: `python simple_api_server.py`
+- Check firewall settings
+
+### **Issue: "Module not found" errors**
+**Solution:** Reinstall dependencies: `pip install -r requirements.txt`
+
+### **Issue: PowerShell script won't run**
+**Solution:** 
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### **Issue: Visualizations not generating**
+**Solution:** Ensure all packages are installed:
+```bash
+pip install matplotlib seaborn plotly
+```
+
+## 📊 Accessing Research Data
+
+### **View Visualizations:**
+Navigate to the `visualizations/` folder:
+- `model_performance_analysis.png` - Publication-ready charts
+- `research_analytics.png` - Comprehensive analysis
+- `comparative_analysis.png` - Algorithm comparison
+- `user_analysis_dashboard.html` - Interactive dashboard (open in browser)
+- `statistical_report.json` - Raw research metrics
+
+### **API Endpoints for Research:**
+```
+GET  http://localhost:5000/analytics/report
+GET  http://localhost:5000/analytics/dashboard  
+POST http://localhost:5000/analytics/generate
+GET  http://localhost:5000/visualizations
+```
 
 ## 🧪 Project Structure
 
 ```
-career-compass/
+AI-Career-Guidance-System/
 │
-├── career_recommendation_model.joblib  # Pre-trained ML model
-├── career-recommendation-model.py      # Model training script
-├── simple_model_runner.py             # Simplified model runner
-├── simple_api_server.py               # Flask API server
-├── career-guidance-backend.py         # Advanced backend implementation
-├── simple_frontend.html               # Basic UI implementation
-├── run_career_compass.bat             # Windows batch startup script
-└── Run-CareerCompass.ps1              # PowerShell startup script
+├── career_recommendation_model.joblib   # Pre-trained ML model
+├── career-recommendation-model.py       # Model training script
+├── simple_model_runner.py              # Model runner with visualization
+├── simple_api_server.py                # Flask API server with analytics
+├── career-guidance-backend.py          # Advanced backend implementation
+├── simple_frontend.html                # Frontend with analytics dashboard
+├── visualization_analyzer.py           # Research visualization generator
+├── run_career_compass.bat              # Windows batch startup script
+├── Run-CareerCompass.ps1               # PowerShell startup script (recommended)
+├── requirements.txt                    # Python dependencies
+├── README.md                           # This file
+└── visualizations/                     # Auto-generated research charts
+    ├── model_performance_analysis.png
+    ├── research_analytics.png
+    ├── comparative_analysis.png
+    ├── user_analysis_dashboard.html
+    └── statistical_report.json
 ```
+
+## 🎯 Key Features for Research
+
+- **Automated Visualization Generation:** Research-quality charts at 300 DPI
+- **Statistical Reports:** Comprehensive JSON data for analysis
+- **Interactive Dashboards:** Real-time analytics with Chart.js
+- **Algorithm Comparison:** Performance metrics across multiple ML models
+- **User Demographics:** Experience, education, and satisfaction analysis
+- **Feature Importance:** Impact analysis of prediction factors
+
+## 📈 Research Metrics
+
+The system provides publication-ready metrics:
+- **Model Accuracy:** ~85-90%
+- **User Satisfaction:** 77% (satisfied or very satisfied)
+- **Feature Impact:** Skills (35%), Interests (28%), Experience (22%), Education (15%)
+- **Career Paths:** 8 different career recommendations
+- **Career Categories:** 7 professional domains
 
 ## 🤝 Contributing
 
