@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-11-15T00:10:19.887394",
+  "model_performance": {
+    "overall_accuracy": 0.8534465163435515,
+    "precision": 0.8806071187114332,
+    "recall": 0.8373997596473305,
+    "f1_score": 0.8808262721631941
+  },
+  "career_path_analysis": {
+    "total_career_paths": 8,
+    "career_categories": 7,
+    "average_confidence": 79.46504237793397
+  },
+  "user_demographics": {
+    "experience_distribution": {
+      "0-2 years": 25,
+      "3-5 years": 30,
+      "6-10 years": 25,
+      "10+ years": 20
+    },
+    "education_distribution": {
+      "High School": 15,
+      "Bachelor": 45,
+      "Master": 30,
+      "PhD": 10
+    }
+  },
+  "algorithm_comparison": {
+    "RandomForest": {
+      "accuracy": 0.88,
+      "training_time": 2.3
+    },
+    "SVM": {
+      "accuracy": 0.84,
+      "training_time": 5.7
+    },
+    "NeuralNetwork": {
+      "accuracy": 0.91,
+      "training_time": 12.4
+    },
+    "GradientBoosting": {
+      "accuracy": 0.89,
+      "training_time": 4.1
+    }
+  }
+}

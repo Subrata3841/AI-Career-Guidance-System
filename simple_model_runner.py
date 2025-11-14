@@ -202,6 +202,36 @@ model.train(X_train, y_train)
 model_path = 'career_recommendation_model.joblib'
 model.save_model(model_path)
 
+# Generate visualizations for research
+print("\n🎨 Generating research visualizations...")
+try:
+    from visualization_analyzer import generate_all_visualizations
+    
+    # Generate test data for visualizations
+    from sklearn.model_selection import train_test_split
+    X_features = model.extract_features(X_train)
+    X_train_viz, X_test_viz, y_train_viz, y_test_viz = train_test_split(
+        X_features, y_train, test_size=0.2, random_state=42
+    )
+    
+    # Make predictions for visualization
+    predictions_viz = model.model.predict(X_test_viz)
+    
+    # Generate all visualizations
+    generated_files, report = generate_all_visualizations(
+        model.model, 
+        X_train, 
+        test_data=(X_test_viz, y_test_viz, predictions_viz)
+    )
+    
+    print("✅ Research visualizations generated successfully!")
+    print(f"📊 Files saved in 'visualizations/' directory")
+    
+except ImportError as e:
+    print("⚠️  Visualization libraries not installed. Run: pip install -r requirements.txt")
+except Exception as e:
+    print(f"⚠️  Error generating visualizations: {e}")
+
 # Test the model with a sample user
 print("\nTesting the model with a sample user...")
 sample_user = pd.DataFrame([{
@@ -220,3 +250,4 @@ for i, career in enumerate(recommendations[0][:3]):
     print(f"{i+1}. {career['career_path']}: {career['confidence_score']}% confidence")
 
 print("\nModel is ready for use with the frontend!")
+print("📈 Research visualizations and analytics are available for your paper!")

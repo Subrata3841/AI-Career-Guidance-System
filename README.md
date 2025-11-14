@@ -1,4 +1,4 @@
-# Career Compass: AI-Enhanced Career Guidance System
+# AI-Enhanced Career Guidance System
 
 ![Career Compass Logo](https://img.shields.io/badge/Career-Compass-blue)
 ![Version](https://img.shields.io/badge/version-1.0.0-green)
@@ -6,7 +6,7 @@
 
 ## 🚀 Overview
 
-Career Compass is an innovative AI-powered career guidance platform designed to provide personalized career pathways for students and professionals. The system leverages machine learning algorithms to analyze an individual's aptitude, aspirations, skills, and work experience to recommend tailored career options and future progression opportunities.
+AI-Enhanced Career Guidance System is an innovative AI-powered career guidance platform designed to provide personalized career pathways for students and professionals. The system leverages machine learning algorithms to analyze an individual's aptitude, aspirations, skills, and work experience to recommend tailored career options and future progression opportunities.
 
 ## 🎯 Problem Statement
 

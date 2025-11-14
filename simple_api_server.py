@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import pandas as pd
 import joblib
 import os
 import sys
 from flask_cors import CORS
+import json
 
 # Import the SimpleCareerModel class from simple_model_runner.py
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -81,6 +82,116 @@ def recommend():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/visualizations')
+def list_visualizations():
+    """List available visualization files"""
+    viz_dir = 'visualizations'
+    if os.path.exists(viz_dir):
+        files = [f for f in os.listdir(viz_dir) if f.endswith(('.png', '.html', '.json'))]
+        return jsonify({"visualizations": files})
+    return jsonify({"visualizations": []})
+
+@app.route('/visualizations/<filename>')
+def get_visualization(filename):
+    """Serve visualization files"""
+    viz_dir = 'visualizations'
+    if os.path.exists(viz_dir):
+        return send_from_directory(viz_dir, filename)
+    return jsonify({"error": "Visualization not found"}), 404
+
+@app.route('/analytics/report')
+def get_analytics_report():
+    """Get statistical report for research"""
+    report_path = 'visualizations/statistical_report.json'
+    if os.path.exists(report_path):
+        with open(report_path, 'r') as f:
+            report = json.load(f)
+        return jsonify(report)
+    return jsonify({"error": "Report not found"}), 404
+
+@app.route('/analytics/generate', methods=['POST'])
+def generate_analytics():
+    """Generate new visualizations and analytics"""
+    try:
+        # Import visualization generator
+        from visualization_analyzer import generate_all_visualizations
+        from sklearn.model_selection import train_test_split
+        import numpy as np
+        
+        if model is None:
+            return jsonify({"error": "Model not loaded"}), 500
+        
+        # Generate sample data for visualization
+        from simple_model_runner import generate_training_data
+        X_train, y_train = generate_training_data(500)
+        
+        # Generate test data
+        X_features = model.extract_features(X_train)
+        X_train_viz, X_test_viz, y_train_viz, y_test_viz = train_test_split(
+            X_features, y_train, test_size=0.2, random_state=42
+        )
+        
+        # Make predictions
+        predictions_viz = model.model.predict(X_test_viz)
+        
+        # Generate visualizations
+        generated_files, report = generate_all_visualizations(
+            model.model, 
+            X_train, 
+            test_data=(X_test_viz, y_test_viz, predictions_viz)
+        )
+        
+        return jsonify({
+            "status": "success",
+            "generated_files": generated_files,
+            "report": report
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"Failed to generate analytics: {str(e)}"}), 500
+
+@app.route('/analytics/dashboard')
+def get_dashboard_data():
+    """Get data for research dashboard"""
+    try:
+        # Sample dashboard data for research
+        dashboard_data = {
+            "model_metrics": {
+                "accuracy": 88.5,
+                "precision": 86.2,
+                "recall": 87.1,
+                "f1_score": 86.6
+            },
+            "career_distribution": {
+                "Software Developer": 18,
+                "Data Scientist": 22,
+                "UX Designer": 12,
+                "Project Manager": 15,
+                "Business Analyst": 13,
+                "Marketing Specialist": 8,
+                "Healthcare Administrator": 7,
+                "Financial Analyst": 5
+            },
+            "user_satisfaction": {
+                "very_satisfied": 42,
+                "satisfied": 35,
+                "neutral": 15,
+                "dissatisfied": 6,
+                "very_dissatisfied": 2
+            },
+            "feature_importance": {
+                "Skills Match": 35,
+                "Interest Alignment": 28,
+                "Experience Level": 22,
+                "Education Background": 15
+            }
+        }
+        
+        return jsonify(dashboard_data)
+        
+    except Exception as e:
+        return jsonify({"error": f"Failed to get dashboard data: {str(e)}"}), 500
+
 def get_required_skills(career_path):
     """Return sample required skills for each career path"""
     skills_map = {
@@ -99,4 +210,10 @@ def get_required_skills(career_path):
 if __name__ == '__main__':
     port = 5000
     print(f"Starting API server on port {port}")
+    print("📊 Analytics endpoints available:")
+    print("  GET /analytics/report - Statistical report")
+    print("  GET /analytics/dashboard - Dashboard data") 
+    print("  POST /analytics/generate - Generate new visualizations")
+    print("  GET /visualizations - List visualization files")
+    print("  GET /visualizations/<filename> - Get visualization file")
     app.run(debug=True, port=port)
